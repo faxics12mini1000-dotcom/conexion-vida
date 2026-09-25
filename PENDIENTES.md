@@ -2,6 +2,24 @@
 
 Regla del proyecto: no se inventa nada. Mientras falte un dato, el sitio muestra un TODO comentado en el código o se oculta la sección. Marca cada punto cuando lo tengas.
 
+## Estado tras la Fase 1 (2026-09-24)
+
+**Fuentes usadas** (todo lo demás se ocultó):
+- `Propuesta página web.pdf` (esquema de la iglesia): 4 campus (Querétaro, Celaya, Puebla, Santa María), programas Wuambaland / Up Street / Primeros pasos, Instituto Bíblico, serie actual "lo que nuestro mundo necesita ya", lista "lo que puedes esperar de nosotros", camino de fe.
+- Logos `qro.jpg` y `celaya.jpg` (colores medidos por píxel: azul marino `#0B2848`, verde `#4EA62B`).
+- Biografías públicas de Instagram/Facebook/YouTube (consultadas 2026-09-24, **sin confirmar con la iglesia**):
+  - Querétaro (Juriquilla): Viernes 7:30 PM, Domingo 12:30 PM. Instagram `@conexionvida.queretaro` ("Conectando a las personas con Jesús"), Facebook `ConexionVidaQueretaro`.
+  - Celaya: Miércoles 7:30 PM, Domingo 10:00 AM. Instagram `@conexionvida.celaya`, YouTube `youtube.com/c/conexionvidacelaya`.
+- Puebla y Santa María: **sin ningún dato ni logo**; el sitio solo muestra el nombre.
+
+**Ocultas en `page.tsx` (código conservado, comentado con TODO):** ¿Es tu primera vez? (respuestas), Niños y jóvenes, Mensajes, Grupos pequeños, Generosidad, formulario de contacto (enviaba a un correo inexistente).
+
+**Verificar con la iglesia (lo más urgente):**
+- [ ] Que los horarios de arriba estén vigentes y qué es cada reunión (¿el viernes en Querétaro y el miércoles en Celaya son servicio, jóvenes, grupos?). Los horarios de ejemplo anteriores (Dom 10/12 y Dom 11) eran incorrectos.
+- [ ] Que Puebla y Santa María sean campus activos y no proyectos.
+- [ ] Logo general de la iglesia (los dos logos son variantes por campus). Vector SVG de ambos: los JPG de 447 px se ven borrosos en pantallas grandes.
+- [ ] Logos de Puebla y Santa María, si tienen.
+
 ## 1. Identidad y dominio
 - [ ] Dominio final de producción (para `metadataBase`, Open Graph, sitemap, canonical).
 - [ ] Nombre oficial completo de la iglesia y denominación/afiliación, si aplica.

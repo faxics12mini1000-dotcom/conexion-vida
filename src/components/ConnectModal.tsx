@@ -1,67 +1,40 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { CalendarPlus, Check, MapPin, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { CalendarPlus, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { campuses, getCampus } from "@/data/campuses";
-import { accent } from "@/lib/accent";
-import { buildServiceIcs, formatSundayLabel } from "@/lib/calendar";
+import { buildServiceIcs, formatNextLabel } from "@/lib/calendar";
 import { cn } from "@/lib/utils";
 import { useApp } from "./AppProvider";
-import { Icon, InstagramIcon } from "./icons";
+import { InstagramIcon } from "./icons";
 
-const FOCUSABLE =
-  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
+/**
+ * Modal "Planea tu visita" con <dialog> nativo: el navegador se encarga del
+ * foco, del Escape y de bloquear la interacción con el resto de la página.
+ */
 export function ConnectModal() {
   const { visitOpen, closeVisit, campus: campusId, setCampus } = useApp();
   const [serviceIdx, setServiceIdx] = useState(0);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const lastFocused = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const campus = getCampus(campusId);
   const service = campus.services[serviceIdx] ?? campus.services[0];
-  const a = accent[campus.id];
 
-  // Foco, scroll lock y restauración de foco
   useEffect(() => {
-    if (!visitOpen) return;
-    lastFocused.current = document.activeElement as HTMLElement | null;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const raf = requestAnimationFrame(() => {
-      dialogRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
-    });
-    return () => {
-      cancelAnimationFrame(raf);
-      document.body.style.overflow = prevOverflow;
-      lastFocused.current?.focus?.();
-    };
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (visitOpen && !dialog.open) dialog.showModal();
+    if (!visitOpen && dialog.open) dialog.close();
   }, [visitOpen]);
 
-  const onKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") {
-        closeVisit();
-        return;
-      }
-      if (e.key !== "Tab" || !dialogRef.current) return;
-      const items = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE),
-      );
-      if (items.length === 0) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    },
-    [closeVisit],
-  );
+  useEffect(() => {
+    if (!visitOpen) return;
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
+  }, [visitOpen]);
 
   function downloadIcs() {
     const blob = new Blob([buildServiceIcs(campus, service)], {
@@ -78,166 +51,101 @@ export function ConnectModal() {
   }
 
   return (
-    <AnimatePresence>
-      {visitOpen && (
-        <motion.div
-          className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onKeyDown={onKeyDown}
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="visit-title"
+      onClose={closeVisit}
+      onClick={(e) => {
+        // Un clic sobre el fondo (::backdrop) llega con el <dialog> como destino.
+        if (e.target === e.currentTarget) closeVisit();
+      }}
+      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-ui border border-line bg-paper p-0 text-ink backdrop:bg-navy/70"
+    >
+      <div data-campus={campus.id} className="relative p-6 sm:p-8">
+        <button
+          type="button"
+          onClick={closeVisit}
+          aria-label="Cerrar"
+          className="absolute top-3 right-3 inline-flex size-11 items-center justify-center rounded-ui hover:bg-cream"
         >
-          <div
-            className="absolute inset-0 bg-cv-navy/70 backdrop-blur-sm"
-            onClick={closeVisit}
-            aria-hidden="true"
-          />
-          <motion.div
-            ref={dialogRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="visit-title"
-            className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8"
-            initial={{ opacity: 0, y: 40, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.98 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <button
-              type="button"
-              onClick={closeVisit}
-              className="absolute top-4 right-4 rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-cv-navy focus-visible:ring-2 focus-visible:ring-cv-brand focus-visible:outline-none"
-              aria-label="Cerrar"
-            >
-              <X className="h-5 w-5" />
-            </button>
+          <X className="size-5" aria-hidden="true" />
+        </button>
 
-            <h2
-              id="visit-title"
-              className="pr-10 text-2xl font-semibold tracking-tight text-cv-navy"
-            >
-              Planea tu visita
-            </h2>
-            <p className="mt-1 text-slate-600">
-              Elige tu campus y horario. Te esperamos con un café y una sonrisa.
-            </p>
+        <h2 id="visit-title" className="pr-12 text-3xl">
+          Planea tu visita
+        </h2>
+        <p className="mt-2 text-muted">Elige tu campus y horario.</p>
 
-            {/* Selector de campus */}
-            <div
-              role="radiogroup"
-              aria-label="Campus"
-              className="mt-6 grid grid-cols-2 gap-3"
-            >
-              {campuses.map((c) => {
-                const active = c.id === campus.id;
-                const ca = accent[c.id];
-                return (
-                  <button
-                    key={c.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => {
-                      setCampus(c.id);
-                      setServiceIdx(0);
-                    }}
-                    className={cn(
-                      "rounded-2xl border-2 p-4 text-left transition focus-visible:ring-2 focus-visible:ring-cv-brand focus-visible:outline-none",
-                      active
-                        ? cn(ca.border, ca.bgSoft, "border-current", ca.text)
-                        : "border-slate-200 text-cv-navy hover:border-slate-300",
-                    )}
-                  >
-                    <MapPin className="h-5 w-5" aria-hidden="true" />
-                    <span className="mt-2 block font-semibold">
-                      {c.shortName}
-                    </span>
-                    <span className="block text-xs text-slate-500">
-                      {c.city}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Horarios */}
-            <p className="mt-6 text-sm font-medium text-slate-500">Horario</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {campus.services.map((s, i) => {
-                const active = i === serviceIdx;
-                return (
-                  <button
-                    key={s.label}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => setServiceIdx(i)}
-                    className={cn(
-                      "rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-cv-brand focus-visible:outline-none",
-                      active
-                        ? cn(a.bg, "text-white")
-                        : "bg-slate-100 text-cv-navy hover:bg-slate-200",
-                    )}
-                  >
-                    {s.day} · {s.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className={cn("mt-6 rounded-2xl p-4", a.bgSoft)}>
-              <p className="flex items-center gap-2 text-sm font-semibold text-cv-navy">
-                <Check className={cn("h-4 w-4", a.text)} aria-hidden="true" />
-                Tu próxima visita: {formatSundayLabel(service)}, {service.label}
-              </p>
-              <p className="mt-1 pl-6 text-sm text-slate-600">
-                {campus.address}
-              </p>
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <a
-                href={campus.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-cv-navy px-5 py-3 text-sm font-semibold text-white transition hover:bg-cv-navy/90 focus-visible:ring-2 focus-visible:ring-cv-brand focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-                Cómo llegar
-              </a>
+        <div role="group" aria-label="Campus" className="mt-6 grid grid-cols-2 gap-3">
+          {campuses.map((c) => {
+            const active = c.id === campus.id;
+            return (
               <button
+                key={c.id}
                 type="button"
-                onClick={downloadIcs}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-cv-navy transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cv-brand focus-visible:ring-offset-2 focus-visible:outline-none"
+                aria-pressed={active}
+                onClick={() => {
+                  setCampus(c.id);
+                  setServiceIdx(0);
+                }}
+                className={cn(
+                  "min-h-11 rounded-ui border p-3 text-left",
+                  active ? "border-campus bg-campus text-cream" : "border-line hover:border-muted",
+                )}
               >
-                <CalendarPlus className="h-4 w-4" aria-hidden="true" />
-                Agregar al calendario
+                <span className="block font-semibold">{c.shortName}</span>
+                <span className={cn("block text-sm", active ? "text-cream" : "text-muted")}>
+                  {c.city}
+                </span>
               </button>
-            </div>
+            );
+          })}
+        </div>
 
-            <a
-              href={campus.instagram.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500 transition hover:text-cv-navy"
-            >
-              <InstagramIcon className="h-4 w-4" />
-              Síguenos {campus.instagram.handle}
-            </a>
+        <p className="mt-6 text-sm font-semibold text-muted">Horario</p>
+        <div role="group" aria-label="Horario" className="mt-2 flex flex-wrap gap-2">
+          {campus.services.map((s, i) => {
+            const active = i === serviceIdx;
+            return (
+              <button
+                key={s.day + s.label}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setServiceIdx(i)}
+                className={cn(
+                  "min-h-11 rounded-ui border px-4 font-semibold",
+                  active ? "border-campus bg-campus text-cream" : "border-line hover:border-muted",
+                )}
+              >
+                {s.day} · {s.label}
+              </button>
+            );
+          })}
+        </div>
 
-            <ul className="mt-5 flex flex-wrap justify-center gap-2">
-              {campus.badges.map((b) => (
-                <li
-                  key={b.label}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600"
-                >
-                  <Icon name={b.icon} className="h-3.5 w-3.5" />
-                  {b.label}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        <div className="mt-6 rounded-ui bg-campus-soft p-4">
+          <p className="font-semibold">
+            Tu próxima visita: {formatNextLabel(service)}, {service.label}
+          </p>
+          <p className="mt-1 text-muted">{campus.address}</p>
+        </div>
+
+        {/* TODO(PENDIENTES §2): botón "Cómo llegar" cuando exista la dirección exacta. */}
+        <button type="button" onClick={downloadIcs} className="btn btn-navy mt-6 w-full">
+          <CalendarPlus className="size-4" aria-hidden="true" />
+          Agregar al calendario
+        </button>
+
+        <a
+          href={campus.instagram.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex min-h-11 items-center justify-center gap-2 text-muted underline underline-offset-4"
+        >
+          <InstagramIcon className="size-4" />
+          {campus.instagram.handle}
+        </a>
+      </div>
+    </dialog>
   );
 }

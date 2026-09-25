@@ -1,6 +1,5 @@
 "use client";
 
-import { MotionConfig } from "framer-motion";
 import {
   createContext,
   useCallback,
@@ -12,8 +11,6 @@ import {
 import type { CampusId } from "@/data/types";
 import { ConnectModal } from "./ConnectModal";
 
-export type ContactTopic = "oracion" | "grupo" | "bautismo" | "servir" | "info";
-
 interface AppState {
   /** Campus seleccionado globalmente (navbar, hero, modal). */
   campus: CampusId;
@@ -21,8 +18,6 @@ interface AppState {
   visitOpen: boolean;
   openVisit: (id?: CampusId) => void;
   closeVisit: () => void;
-  contactTopic: ContactTopic;
-  setContactTopic: (topic: ContactTopic) => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -30,7 +25,6 @@ const AppContext = createContext<AppState | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [campus, setCampus] = useState<CampusId>("queretaro");
   const [visitOpen, setVisitOpen] = useState(false);
-  const [contactTopic, setContactTopic] = useState<ContactTopic>("oracion");
 
   const openVisit = useCallback((id?: CampusId) => {
     if (id) setCampus(id);
@@ -39,25 +33,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const closeVisit = useCallback(() => setVisitOpen(false), []);
 
   const value = useMemo<AppState>(
-    () => ({
-      campus,
-      setCampus,
-      visitOpen,
-      openVisit,
-      closeVisit,
-      contactTopic,
-      setContactTopic,
-    }),
-    [campus, visitOpen, openVisit, closeVisit, contactTopic],
+    () => ({ campus, setCampus, visitOpen, openVisit, closeVisit }),
+    [campus, visitOpen, openVisit, closeVisit],
   );
 
   return (
     <AppContext.Provider value={value}>
-      {/* Respeta "reducir movimiento" del sistema operativo */}
-      <MotionConfig reducedMotion="user">
-        {children}
-        <ConnectModal />
-      </MotionConfig>
+      {children}
+      <ConnectModal />
     </AppContext.Provider>
   );
 }

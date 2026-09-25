@@ -1,42 +1,207 @@
 @import "tailwindcss";
 
-/* Paleta institucional Conexión Vida (Tailwind v4: tokens vía @theme) */
-@theme inline {
-  --color-cv-navy: #0f172a;
-  --color-cv-brand: #2563eb;
-  --color-cv-queretaro: #0284c7;
-  --color-cv-celaya: #0d9488;
-  --color-cv-mist: #f1f5f9;
+/*
+ * Sistema de diseño Conexión Vida.
+ * Marca: azul marino y verde tomados de los logos oficiales de cada campus
+ * (medidos por píxel: #0B2848 y #4EA62B) + neutros cálidos.
+ * Reglas: sin gradientes, sin blur, sin sombras, radius máximo 3px.
+ */
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+@theme static {
+  /* Se elimina la paleta por defecto: solo existen los colores de marca. */
+  --color-*: initial;
+
+  /* Marca */
+  --color-navy: #0b2848;
+  --color-green: #4ea62b; /* verde del logo. Sobre navy: 4.83:1. NO usar como texto sobre crema (2.76:1). */
+  --color-green-deep: #2a6f10; /* mismo verde, más oscuro, para texto y botones sobre fondos claros: 5.56:1 sobre crema */
+
+  /* Neutros cálidos */
+  --color-cream: #f6f2e9;
+  --color-paper: #fbf9f4;
+  --color-ink: #1a1712;
+  --color-muted: #5b5346; /* texto secundario: 6.78:1 sobre crema */
+  --color-line: #d8d0bf;
+  --color-on-navy: #b9c4d2; /* texto secundario sobre navy: 8.42:1 */
+
+  /* Tintes suaves para fondos de campus */
+  --color-navy-soft: #e3eaf2;
+  --color-green-soft: #e4eedb;
+
+  /* Tipografía */
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-source-sans), system-ui, sans-serif;
+
+  /* Radius: un solo valor. Se desactivan los demás. */
+  --radius-*: initial;
+  --radius-ui: 3px;
+
+  /* Sin sombras */
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+
+  /* Espaciado */
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --space-section: clamp(4rem, 9vw, 7.5rem);
+  --measure: 68ch;
+  --header-h: 4rem;
+}
+
+/* Color por campus: cada bloque con data-campus toma su acento. */
+@theme inline {
+  --color-campus: var(--campus);
+  --color-campus-soft: var(--campus-soft);
 }
 
 :root {
   color-scheme: light;
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --campus: var(--color-navy);
+  --campus-soft: var(--color-navy-soft);
+  --focus: var(--color-green-deep);
+}
+
+/* Querétaro: logo todo en verde. */
+[data-campus="queretaro"] {
+  --campus: var(--color-green-deep);
+  --campus-soft: var(--color-green-soft);
+}
+
+/* Celaya: logo azul marino con verde. */
+[data-campus="celaya"] {
+  --campus: var(--color-navy);
+  --campus-soft: var(--color-navy-soft);
+}
+
+/* Superficies oscuras: el foco pasa a verde claro. */
+[data-tone="dark"] {
+  --focus: var(--color-green);
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Las secciones con ancla dejan espacio para el navbar sticky */
-section[id],
-footer[id] {
-  scroll-margin-top: 4.5rem;
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+p {
+  max-inline-size: var(--measure);
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-cv-brand) 25%, transparent);
+  background: var(--color-green);
+  color: var(--color-navy);
+}
+
+/* Las anclas dejan espacio para el header fijo */
+section[id],
+footer[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+/* Contenedor y ritmo vertical */
+@utility wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility section-y {
+  padding-block: var(--space-section);
+}
+
+/* Botones: 44px de alto mínimo, radius 3px, sin sombra */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-ui);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    border-color 150ms;
+}
+
+/* Primario sobre fondo claro: navy + crema (13.32:1) */
+@utility btn-navy {
+  background: var(--color-navy);
+  color: var(--color-cream);
+  &:hover {
+    background: color-mix(in srgb, var(--color-navy) 82%, var(--color-ink));
+  }
+}
+
+/* Primario sobre fondo oscuro: verde del logo + navy (4.83:1) */
+@utility btn-green {
+  background: var(--color-green);
+  color: var(--color-navy);
+  &:hover {
+    background: color-mix(in srgb, var(--color-green) 88%, var(--color-cream));
+  }
+}
+
+/* Secundario: borde con el color del texto */
+@utility btn-line {
+  border-color: currentColor;
+  &:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+}
+
+/* Única animación del sitio: entrada del contenido del hero */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility hero-enter {
+  animation: hero-enter 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

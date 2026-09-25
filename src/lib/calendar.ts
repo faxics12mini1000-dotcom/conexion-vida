@@ -2,11 +2,11 @@ import type { Campus, ServiceTime } from "@/data/campuses";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** Próximo domingo (hoy cuenta si el servicio aún no ha empezado). */
-export function nextSunday(service: ServiceTime, from = new Date()): Date {
+/** Próxima fecha de la reunión (hoy cuenta si aún no ha empezado). */
+export function nextOccurrence(service: ServiceTime, from = new Date()): Date {
   const d = new Date(from);
   d.setHours(service.hour, service.minute, 0, 0);
-  const daysUntil = (7 - d.getDay()) % 7;
+  const daysUntil = (service.weekday - d.getDay() + 7) % 7;
   d.setDate(d.getDate() + daysUntil);
   if (d.getTime() <= from.getTime()) d.setDate(d.getDate() + 7);
   return d;
@@ -21,9 +21,12 @@ const icsLocal = (d: Date) =>
 const escapeIcs = (s: string) =>
   s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,");
 
-/** Genera un archivo .ics con el servicio elegido (duración: 90 min). */
+/**
+ * Genera un archivo .ics con la reunión elegida.
+ * TODO(PENDIENTES §3): la duración (90 min) es una suposición; usar la real.
+ */
 export function buildServiceIcs(campus: Campus, service: ServiceTime): string {
-  const start = nextSunday(service);
+  const start = nextOccurrence(service);
   const end = new Date(start.getTime() + 90 * 60 * 1000);
   const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
@@ -37,17 +40,16 @@ export function buildServiceIcs(campus: Campus, service: ServiceTime): string {
     `DTSTAMP:${stamp}`,
     `DTSTART:${icsLocal(start)}`,
     `DTEND:${icsLocal(end)}`,
-    `SUMMARY:${escapeIcs(`Servicio Conexión Vida ${campus.shortName}`)}`,
+    `SUMMARY:${escapeIcs(`Conexión Vida ${campus.shortName}`)}`,
     `LOCATION:${escapeIcs(campus.address)}`,
-    `DESCRIPTION:${escapeIcs("¡Te esperamos! Ven tal como eres.")}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
 }
 
 /** Texto amigable: "domingo 28 de septiembre". */
-export function formatSundayLabel(service: ServiceTime): string {
-  return nextSunday(service).toLocaleDateString("es-MX", {
+export function formatNextLabel(service: ServiceTime): string {
+  return nextOccurrence(service).toLocaleDateString("es-MX", {
     weekday: "long",
     day: "numeric",
     month: "long",

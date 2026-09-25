@@ -1,5 +1,7 @@
 # Auditoría — Conexión Vida (Fase 0)
 
+> **Correcciones posteriores (2026-09-24):** (1) "Una iglesia actual / Personas reales / Enseñanza basada en la Biblia…", "La iglesia no termina el domingo" y el nombre "Wuambaland / Up Street" vienen del esquema de la propia iglesia (`Propuesta página web.pdf`), así que no eran invención; en §2.8 se marcaron como genéricos y no lo son en origen. (2) Puebla y Santa María sí aparecen como campus en ese esquema. (3) Los horarios de ejemplo del código eran incorrectos frente a las biografías públicas de Instagram (ver PENDIENTES.md). (4) La paleta de §6 quedó sustituida por los colores medidos de los logos oficiales: azul marino `#0B2848` y verde `#4EA62B`.
+
 Fecha: 2026-09-24 · Alcance: solo lectura, no se modificó código. `npm run lint` y `npm run build` pasan sin errores.
 
 ## 1. Stack y estructura

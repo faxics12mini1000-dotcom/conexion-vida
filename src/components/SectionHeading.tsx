@@ -1,53 +1,28 @@
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export function SectionHeading({
-  eyebrow,
   title,
-  description,
-  align = "left",
+  lead,
   tone = "light",
   className,
 }: {
-  eyebrow: string;
   title: ReactNode;
-  description?: ReactNode;
-  align?: "left" | "center";
+  lead?: ReactNode;
   tone?: "light" | "dark";
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "max-w-2xl",
-        align === "center" && "mx-auto text-center",
-        className,
-      )}
-    >
-      <p
-        className={cn(
-          "text-sm font-semibold tracking-widest uppercase",
-          tone === "dark" ? "text-sky-300" : "text-cv-brand",
-        )}
-      >
-        {eyebrow}
-      </p>
-      <h2
-        className={cn(
-          "mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl",
-          tone === "dark" ? "text-white" : "text-cv-navy",
-        )}
-      >
-        {title}
-      </h2>
-      {description && (
+    <div className={cn("max-w-2xl", className)}>
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl">{title}</h2>
+      {lead && (
         <p
           className={cn(
-            "mt-4 text-base leading-relaxed text-pretty sm:text-lg",
-            tone === "dark" ? "text-slate-300" : "text-slate-600",
+            "mt-4 text-lg",
+            tone === "dark" ? "text-on-navy" : "text-muted",
           )}
         >
-          {description}
+          {lead}
         </p>
       )}
     </div>

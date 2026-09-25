@@ -1,74 +1,66 @@
-import type { IconKey } from "./types";
-
 export interface NextStep {
   id: string;
   title: string;
-  short: string;
   description: string;
   cta: string;
+  /** "visit" abre el modal de visita; si no, es un ancla. */
   href: string;
-  icon: IconKey;
 }
 
+/**
+ * Los títulos corresponden al camino que plantea la propia iglesia
+ * (Propuesta página web.pdf: explorando la fe, conocer a Jesús, conectar,
+ * bautizarme, servir, liderar; falta "formar a otros").
+ * TODO(PENDIENTES §5): confirmar que este es el proceso real y sus descripciones.
+ * TODO(Fase 3): los CTA apuntan a #contacto porque Grupos y Mensajes están ocultos.
+ */
 export const nextSteps: NextStep[] = [
   {
     id: "explorando",
-    title: "Explorando la fe",
-    short: "Explorar",
+    title: "Estoy explorando la fe",
     description:
-      "Estás en el lugar correcto para tener preguntas. Ven a un servicio, escucha sin presión y date el tiempo de conocer de qué se trata.",
-    cta: "Planear mi primera visita",
-    href: "#primera-vez",
-    icon: "compass",
+      "Puedes venir a una reunión, escuchar y hacer preguntas. No necesitas saber nada de antemano.",
+    cta: "Planear mi visita",
+    href: "visit",
   },
   {
     id: "jesus",
-    title: "Conocer a Jesús",
-    short: "Conocer a Jesús",
+    title: "Quiero conocer más de Jesús",
     description:
-      "Descubre quién es Jesús y qué significa seguirlo. Platica con alguien de nuestro equipo y da tu primer paso de fe a tu ritmo.",
-    cta: "Escuchar los mensajes",
-    href: "#mensajes",
-    icon: "flame",
+      "Escríbenos y conversa con alguien de la iglesia sobre quién es Jesús y qué significa seguirlo.",
+    cta: "Escribirnos",
+    href: "#contacto",
   },
   {
     id: "comunidad",
-    title: "Conectar en comunidad",
-    short: "Comunidad",
+    title: "Quiero conectar",
     description:
-      "La fe se vive mejor acompañado. Únete a un grupo pequeño cerca de ti y construye amistades reales entre semana.",
-    cta: "Buscar un grupo",
-    href: "#grupos",
-    icon: "users",
+      "La fe se vive mejor acompañado. Pregunta por un grupo pequeño cerca de ti.",
+    cta: "Preguntar por un grupo",
+    href: "#contacto",
   },
   {
     id: "bautismo",
-    title: "Bautismo",
-    short: "Bautismo",
+    title: "Quiero bautizarme",
     description:
-      "Un paso público que celebra tu decisión de seguir a Jesús. Te acompañamos en la preparación y en el gran día.",
+      "Un paso público que celebra la decisión de seguir a Jesús. Escríbenos para saber cómo prepararte.",
     cta: "Quiero bautizarme",
     href: "#contacto",
-    icon: "droplets",
   },
   {
     id: "servir",
-    title: "Servir con propósito",
-    short: "Servir",
+    title: "Quiero servir",
     description:
-      "Todos tenemos algo que aportar. Sirve en bienvenida, música, niños o producción y descubre cómo Dios te usa.",
+      "Todos tenemos algo que aportar. Escríbenos y te decimos dónde hace falta ayuda.",
     cta: "Quiero servir",
     href: "#contacto",
-    icon: "hand-heart",
   },
   {
     id: "liderar",
-    title: "Liderar",
-    short: "Liderar",
+    title: "Quiero liderar",
     description:
-      "Da el siguiente nivel: guía a otros, abre un grupo en tu casa y ayuda a que más personas vivan una vida conectada.",
+      "Si ya llevas tiempo en la iglesia y quieres guiar a otros, escríbenos.",
     cta: "Quiero liderar",
     href: "#contacto",
-    icon: "sprout",
   },
 ];
