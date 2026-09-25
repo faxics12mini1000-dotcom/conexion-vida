@@ -5,12 +5,13 @@
 
 export const siteConfig = {
   name: "Conexión Vida",
-  /** Frases de la propia iglesia (Propuesta página web.pdf). Se reescribe el copy en Fase 3. */
+  /** Frases de la propia iglesia (Propuesta página web.pdf). */
   tagline: "Una iglesia actual. Personas reales.",
   /** Basado en la biografía pública de Instagram: "Conectando a las personas con Jesús". */
   description:
     "Conexión Vida: conectando a las personas con Jesús. Campus en Querétaro y Celaya.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** TODO(PENDIENTES §1): dominio final. Se usa en metadataBase, sitemap y robots. */
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/+$/, ""),
   /**
    * TODO(PENDIENTES §9): correo real. Sin valor por defecto a propósito:
    * el formulario de contacto está oculto hasta que exista.
@@ -18,17 +19,25 @@ export const siteConfig = {
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
 } as const;
 
-/** Solo secciones visibles. Al reactivar una sección, agregar su enlace aquí. */
+/**
+ * WhatsApp: https://wa.me/<número con lada de país, ej. 52...>.
+ * Si la variable no existe, `null` y la interfaz muestra un mensaje amigable
+ * en lugar de un enlace roto. TODO(PENDIENTES §9): número real.
+ */
+const whatsappDigits = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+export const whatsappUrl: string | null = whatsappDigits
+  ? `https://wa.me/${whatsappDigits}`
+  : null;
+
+/** Solo secciones visibles, en el orden de la página. */
 export const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Quiénes somos", href: "#quienes-somos" },
   { label: "Campus", href: "#campus" },
+  { label: "Primera vez", href: "#primera-vez" },
+  { label: "Quiénes somos", href: "#quienes-somos" },
+  { label: "Ministerios", href: "#ministerios" },
+  { label: "Mensajes", href: "#mensajes" },
   { label: "Próximos pasos", href: "#proximos-pasos" },
 ] as const;
-
-/** Genera la URL de una foto de Unsplash con recorte y formato automático. */
-const unsplash = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80`;
 
 export interface SiteImage {
   src: string;
@@ -36,42 +45,56 @@ export interface SiteImage {
 }
 
 /**
- * Foto del hero. `null` = fondo navy sólido (#0B2848) con el texto encima.
- * Solo fotos reales de la iglesia (PENDIENTES §10): al recibir una, ponerla en
- * /public/photos (mínimo 2400 px de ancho, JPG) y asignarla aquí; el hero le
- * aplica un overlay sólido y la carga con prioridad.
+ * Fotos de la iglesia, centralizadas. Solo fotos reales, guardadas en
+ * /public/photos (JPG, horizontales; el hero mínimo 2400 px de ancho).
+ * `null` = el componente <PhotoFrame> muestra un contenedor de marca en su lugar.
+ *
+ * Para asignar una foto:
+ *   hero: { src: "/photos/hero.jpg", alt: "Descripción real de la foto" },
+ * Sin stock ni dominios externos (PENDIENTES §10).
  */
-export const heroPhoto: SiteImage | null = null;
+export const churchPhotos = {
+  /** Fondo del hero, overlay sólido navy/80. Sin foto, el hero es navy sólido. */
+  hero: null,
+  /** Interior del auditorio o alabanza (sección "¿Es tu primera vez?"). */
+  auditorio: null,
+  /** Personas conviviendo (sección "Quiénes somos"). */
+  comunidad: null,
+  /** Wuambaland: sin rostros reconocibles o con autorización de los padres. */
+  wuambaland: null,
+  /** Up Street. */
+  upStreet: null,
+  /** Portada de la serie actual (sección "Mensajes"). */
+  serie: null,
+} satisfies Record<string, SiteImage | null>;
+
+export type PhotoKey = keyof typeof churchPhotos;
+
+/** Foto asignada a una clave (o null). Tipada como SiteImage | null. */
+export function getPhoto(key: PhotoKey): SiteImage | null {
+  return churchPhotos[key] as SiteImage | null;
+}
 
 /**
- * STOCK TEMPORAL, solo para secciones OCULTAS (Niños, Mensajes, Grupos,
- * Generosidad). No se renderizan hoy; sustituir por fotos reales antes de
- * reactivarlas (PENDIENTES §10). Ninguna sección visible usa stock.
+ * Generosidad. Estructura lista: los datos reales se llenan cuando la iglesia
+ * entregue la CLABE oficial. Mientras un campo sea `null`, la interfaz muestra
+ * "Por confirmar" y deshabilita el botón de copiar.
+ * TODO(PENDIENTES §8): beneficiario, banco, CLABE y concepto reales.
  */
-export const images = {
-  hands: { src: unsplash("1531206715517-5c0ba140b2b8"), alt: "" },
-  kidsPlay: { src: unsplash("1503454537195-1dcabb73ffb9"), alt: "" },
-  kidsCraft: { src: unsplash("1596464716127-f2a82984de30"), alt: "" },
-  seriesHero: { src: unsplash("1507692049790-de58290a4334"), alt: "" },
-  messageA: { src: unsplash("1478147427282-58a87a120781"), alt: "" },
-  messageB: { src: unsplash("1475483768296-6163e08872a1"), alt: "" },
-  messageC: { src: unsplash("1497633762265-9d179a990aa6"), alt: "" },
-  giving: { src: unsplash("1544027993-37dbfe43562a"), alt: "" },
-} satisfies Record<string, SiteImage>;
-
-/**
- * OCULTO (GivingSection). Datos de ejemplo: NO son reales.
- * TODO(PENDIENTES §8): mostrar solo si la iglesia confirma y da datos reales.
- */
-export const giving = {
+export const giving: {
   bankTransfer: {
-    accountHolder: "EDITAR: razón social",
-    bank: "EDITAR: banco",
-    clabe: "000000000000000000",
-    concept: "EDITAR: concepto sugerido",
+    accountHolder: string | null;
+    bank: string | null;
+    clabe: string | null;
+    concept: string | null;
+  };
+  online: { url: string };
+} = {
+  bankTransfer: {
+    accountHolder: null,
+    bank: null,
+    clabe: null,
+    concept: null,
   },
-  online: {
-    url: "",
-    provider: "pasarela de pago segura",
-  },
-} as const;
+  online: { url: "" },
+};

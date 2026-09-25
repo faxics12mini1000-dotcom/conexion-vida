@@ -1,77 +1,124 @@
 import { campuses } from "@/data/campuses";
-import { navLinks } from "@/data/site";
+import { navLinks, siteConfig, whatsappUrl } from "@/data/site";
 import { InstagramIcon } from "./icons";
 import { Wordmark } from "./Wordmark";
 
 const linkClass = "inline-flex min-h-11 items-center gap-2 underline underline-offset-4";
 
+const footerLinks = [...navLinks, { label: "Generosidad", href: "#generosidad" }];
+
 /**
- * TODO(PENDIENTES §9): WhatsApp (wa.me), correo real y aviso de privacidad.
- * El formulario por mailto: se ocultó: enviaba a un correo que no existe.
+ * WhatsApp sale de NEXT_PUBLIC_WHATSAPP_NUMBER; sin número muestra un aviso
+ * amable en lugar de un enlace roto.
+ * TODO(PENDIENTES §9): número real, correo y aviso de privacidad (solo si
+ * algún día se recogen datos personales en un formulario).
  */
 export function Footer() {
   return (
-    <footer id="contacto" data-tone="dark" className="bg-navy text-cream">
+    <footer id="contacto" aria-labelledby="contacto-title" data-tone="dark" className="bg-navy text-cream">
       <div className="wrap section-y grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Wordmark className="text-2xl" />
-          <h2 className="mt-8 text-3xl">Contacto</h2>
-          <p className="mt-3 text-on-navy">
-            Por ahora, escríbenos por mensaje directo en las redes de tu campus.
+          <h2 id="contacto-title" className="mt-8 text-3xl sm:text-4xl">
+            Contacto
+          </h2>
+          <p className="mt-3 text-lg text-on-navy">
+            ¿Tienes una duda o quieres dar el siguiente paso? Escríbenos.
           </p>
-          <ul className="mt-6 flex flex-wrap gap-x-4">
-            {navLinks.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="inline-flex min-h-11 items-center text-cream/85 hover:text-cream">
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        <div className="grid gap-10 sm:grid-cols-2 lg:col-span-7">
-          {campuses.map((c) => (
-            <div key={c.id}>
-              <h3 className="text-2xl">{c.name}</h3>
-              <p className="mt-1 text-on-navy">{c.city}</p>
-              <p className="mt-4 text-sm font-semibold text-green">Reuniones</p>
-              <ul className="mt-1 text-on-navy">
-                {c.services.map((s) => (
-                  <li key={s.day + s.label}>
-                    {s.day} · {s.label}
-                  </li>
-                ))}
-              </ul>
-              <ul className="mt-3">
-                <li>
+          {whatsappUrl ? (
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-green mt-6"
+            >
+              Escribir por WhatsApp
+              <span className="sr-only"> (se abre en otra pestaña)</span>
+            </a>
+          ) : (
+            <p className="mt-6 border-l-2 border-green pl-4 text-on-navy">
+              Muy pronto tendremos un número de WhatsApp. Mientras tanto, escríbenos
+              por mensaje directo en Instagram.
+            </p>
+          )}
+
+          {siteConfig.contactEmail && (
+            <p className="mt-4">
+              <a href={`mailto:${siteConfig.contactEmail}`} className={linkClass}>
+                {siteConfig.contactEmail}
+              </a>
+            </p>
+          )}
+
+          <nav aria-label="Secciones del sitio" className="mt-8">
+            <ul className="flex flex-wrap gap-x-4">
+              {footerLinks.map((l) => (
+                <li key={l.href}>
                   <a
-                    href={c.instagram.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClass}
+                    href={l.href}
+                    className="inline-flex min-h-11 items-center text-cream/85 hover:text-cream"
                   >
-                    <InstagramIcon className="size-4" />
-                    {c.instagram.handle}
+                    {l.label}
                   </a>
                 </li>
-                {c.links.map((l) => (
-                  <li key={l.url}>
-                    <a href={l.url} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                      {l.label}
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="lg:col-span-7">
+          <h3 className="text-sm font-semibold text-green">Reuniones dominicales</h3>
+          <div className="mt-4 grid gap-10 sm:grid-cols-2">
+            {campuses.map((c) => (
+              <div key={c.id}>
+                <h4 className="text-2xl">{c.name}</h4>
+                <p className="mt-1 text-on-navy">{c.city}</p>
+                <ul className="mt-3 text-lg">
+                  {c.services.map((s) => (
+                    <li key={s.day + s.label}>
+                      {s.day} · {s.label}
+                    </li>
+                  ))}
+                </ul>
+                <ul className="mt-3">
+                  <li>
+                    <a
+                      href={c.instagram.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClass}
+                    >
+                      <InstagramIcon className="size-4" />
+                      {c.instagram.handle}
+                      <span className="sr-only"> (se abre en otra pestaña)</span>
                     </a>
                   </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                  {c.links.map((l) => (
+                    <li key={l.url}>
+                      <a
+                        href={l.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={linkClass}
+                      >
+                        {l.label}
+                        <span className="sr-only"> (se abre en otra pestaña)</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="border-t border-cream/15">
-        <p className="wrap py-6 text-sm text-on-navy">
-          © {new Date().getFullYear()} Conexión Vida. Todos los derechos reservados.
-        </p>
+        <div className="wrap flex flex-col gap-1 py-6 text-sm text-on-navy sm:flex-row sm:justify-between">
+          <p>© {new Date().getFullYear()} Conexión Vida. Todos los derechos reservados.</p>
+          <p>El nombre y los logos de Conexión Vida pertenecen a la iglesia.</p>
+        </div>
       </div>
     </footer>
   );

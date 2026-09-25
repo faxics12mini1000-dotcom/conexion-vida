@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarPlus, X } from "lucide-react";
+import { CalendarPlus, MapPin, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { campuses, getCampus } from "@/data/campuses";
 import { buildServiceIcs, formatNextLabel } from "@/lib/calendar";
@@ -74,7 +74,7 @@ export function ConnectModal() {
         <h2 id="visit-title" className="pr-12 text-3xl">
           Planea tu visita
         </h2>
-        <p className="mt-2 text-muted">Elige tu campus y horario.</p>
+        <p className="mt-2 text-muted">Elige tu campus. Nos reunimos los domingos.</p>
 
         <div role="group" aria-label="Campus" className="mt-6 grid grid-cols-2 gap-3">
           {campuses.map((c) => {
@@ -102,26 +102,31 @@ export function ConnectModal() {
           })}
         </div>
 
-        <p className="mt-6 text-sm font-semibold text-muted">Horario</p>
-        <div role="group" aria-label="Horario" className="mt-2 flex flex-wrap gap-2">
-          {campus.services.map((s, i) => {
-            const active = i === serviceIdx;
-            return (
-              <button
-                key={s.day + s.label}
-                type="button"
-                aria-pressed={active}
-                onClick={() => setServiceIdx(i)}
-                className={cn(
-                  "min-h-11 rounded-ui border px-4 font-semibold",
-                  active ? "border-campus bg-campus text-cream" : "border-line hover:border-muted",
-                )}
-              >
-                {s.day} · {s.label}
-              </button>
-            );
-          })}
-        </div>
+        {/* Con una sola reunión por campus no hay nada que elegir: va directo al resumen. */}
+        {campus.services.length > 1 && (
+          <>
+            <p className="mt-6 text-sm font-semibold text-muted">Horario</p>
+            <div role="group" aria-label="Horario" className="mt-2 flex flex-wrap gap-2">
+              {campus.services.map((s, i) => {
+                const active = i === serviceIdx;
+                return (
+                  <button
+                    key={s.day + s.label}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setServiceIdx(i)}
+                    className={cn(
+                      "min-h-11 rounded-ui border px-4 font-semibold",
+                      active ? "border-campus bg-campus text-cream" : "border-line hover:border-muted",
+                    )}
+                  >
+                    {s.day} · {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         <div className="mt-6 rounded-ui bg-campus-soft p-4">
           <p className="font-semibold">
@@ -130,11 +135,22 @@ export function ConnectModal() {
           <p className="mt-1 text-muted">{campus.address}</p>
         </div>
 
-        {/* TODO(PENDIENTES §2): botón "Cómo llegar" cuando exista la dirección exacta. */}
+        {/* TODO(PENDIENTES §2): enlace de Maps exacto cuando exista la dirección. */}
         <button type="button" onClick={downloadIcs} className="btn btn-navy mt-6 w-full">
           <CalendarPlus className="size-4" aria-hidden="true" />
           Agregar al calendario
         </button>
+
+        <a
+          href={campus.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-line mt-3 w-full text-navy"
+        >
+          <MapPin className="size-4" aria-hidden="true" />
+          Cómo llegar
+          <span className="sr-only"> (se abre en otra pestaña)</span>
+        </a>
 
         <a
           href={campus.instagram.url}

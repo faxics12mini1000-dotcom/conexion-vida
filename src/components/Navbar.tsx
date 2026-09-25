@@ -9,7 +9,7 @@ import { useApp } from "./AppProvider";
 import { Wordmark } from "./Wordmark";
 
 const selectClass =
-  "min-h-11 w-full rounded-ui border border-cream/30 bg-navy px-3 text-base text-cream lg:w-auto";
+  "min-h-11 w-full rounded-ui border border-cream/30 bg-navy px-3 text-base text-cream xl:w-auto";
 
 function CampusSelect({ id }: { id: string }) {
   const { campus, setCampus } = useApp();
@@ -54,16 +54,16 @@ export function Navbar() {
         className="wrap flex h-16 items-center justify-between gap-4"
         aria-label="Principal"
       >
-        <a href="#inicio" aria-label="Conexión Vida, ir al inicio">
+        <a href="#inicio" aria-label="Conexión Vida, ir al inicio" className="whitespace-nowrap">
           <Wordmark />
         </a>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 xl:flex">
           {navLinks.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="inline-flex min-h-11 items-center px-3 text-cream/85 hover:text-cream"
+                className="inline-flex min-h-11 items-center px-2 text-[0.95rem] whitespace-nowrap text-cream/85 hover:text-cream"
               >
                 {l.label}
               </a>
@@ -71,9 +71,9 @@ export function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <CampusSelect id="nav-campus" />
-          <button type="button" onClick={() => openVisit()} className="btn btn-green">
+          <button type="button" onClick={() => openVisit()} className="btn btn-green whitespace-nowrap">
             Planear mi visita
           </button>
         </div>
@@ -84,7 +84,7 @@ export function Navbar() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-          className="inline-flex size-11 items-center justify-center rounded-ui hover:bg-cream/10 lg:hidden"
+          className="inline-flex size-11 items-center justify-center rounded-ui hover:bg-cream/10 xl:hidden"
         >
           {menuOpen ? (
             <X className="size-6" aria-hidden="true" />
@@ -95,7 +95,7 @@ export function Navbar() {
       </nav>
 
       {menuOpen && (
-        <div id="mobile-menu" className="border-t border-cream/15 lg:hidden">
+        <div id="mobile-menu" className="border-t border-cream/15 xl:hidden">
           <div className="wrap max-h-[calc(100svh-4rem)] overflow-y-auto py-4">
             <ul>
               {navLinks.map((l) => (

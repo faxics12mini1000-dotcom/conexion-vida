@@ -16,20 +16,30 @@ const sourceSans = Source_Sans_3({
   display: "swap",
 });
 
-// TODO(Fase 4): Open Graph con imagen 1200x630 y URLs absolutas.
+const title = `${siteConfig.name} · ${siteConfig.tagline}`;
+
+// La imagen OG (1200x630) la genera src/app/opengraph-image.tsx; Next la enlaza sola.
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} · ${siteConfig.tagline}`,
+    default: title,
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: siteConfig.name,
+    title,
     description: siteConfig.description,
+    url: "/",
     locale: "es_MX",
     type: "website",
     siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: siteConfig.description,
   },
 };
 

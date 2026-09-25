@@ -23,11 +23,11 @@ const escapeIcs = (s: string) =>
 
 /**
  * Genera un archivo .ics con la reunión elegida.
- * TODO(PENDIENTES §3): la duración (90 min) es una suposición; usar la real.
+ * La reunión dura aprox. 75 a 80 minutos (confirmado por la iglesia): se usan 80.
  */
 export function buildServiceIcs(campus: Campus, service: ServiceTime): string {
   const start = nextOccurrence(service);
-  const end = new Date(start.getTime() + 90 * 60 * 1000);
+  const end = new Date(start.getTime() + 80 * 60 * 1000);
   const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   return [

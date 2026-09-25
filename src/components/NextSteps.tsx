@@ -1,64 +1,65 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
 import { nextSteps } from "@/data/nextSteps";
 import { cn } from "@/lib/utils";
 import { useApp } from "./AppProvider";
 import { SectionHeading } from "./SectionHeading";
 
+/** Stepper editorial: todos los pasos visibles, unidos por una línea vertical. */
 export function NextSteps() {
   const { openVisit } = useApp();
-  const [openId, setOpenId] = useState<string | null>(nextSteps[0].id);
 
   return (
-    <section id="proximos-pasos" className="section-y bg-paper">
+    <section
+      id="proximos-pasos"
+      aria-labelledby="proximos-pasos-title"
+      className="section-y bg-paper"
+    >
       <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
-          <SectionHeading title="¿Dónde estás en tu camino?" />
+          <div className="lg:sticky lg:top-24">
+            <SectionHeading
+              id="proximos-pasos-title"
+              title="¿Dónde estás en tu camino?"
+              lead="Cada quien va a su ritmo. Elige el paso que te toca hoy."
+            />
+          </div>
         </div>
 
-        <ol className="divide-y divide-line border-y border-line lg:col-span-8">
+        <ol className="lg:col-span-8">
           {nextSteps.map((s, i) => {
-            const open = openId === s.id;
+            const last = i === nextSteps.length - 1;
             return (
-              <li key={s.id}>
-                <h3 className="text-xl sm:text-2xl">
-                  <button
-                    type="button"
-                    onClick={() => setOpenId(open ? null : s.id)}
-                    aria-expanded={open}
-                    aria-controls={`step-${s.id}`}
-                    className="flex min-h-14 w-full items-center gap-4 py-4 text-left"
-                  >
-                    <span className="w-8 shrink-0 font-sans text-base font-semibold text-green-deep">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="flex-1">{s.title}</span>
-                    <ChevronDown
-                      className={cn("size-5 shrink-0", open && "rotate-180")}
-                      aria-hidden="true"
-                    />
-                  </button>
-                </h3>
-                {open && (
-                  <div id={`step-${s.id}`} className="pb-6 pl-12">
-                    <p className="text-muted">{s.description}</p>
-                    {s.href === "visit" ? (
-                      <button
-                        type="button"
-                        onClick={() => openVisit()}
-                        className="btn btn-navy mt-4"
-                      >
-                        {s.cta}
-                      </button>
-                    ) : (
-                      <a href={s.href} className="btn btn-navy mt-4">
-                        {s.cta}
-                      </a>
-                    )}
-                  </div>
+              <li key={s.id} className={cn("relative flex gap-5 sm:gap-8", !last && "pb-12")}>
+                {!last && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-14 bottom-2 left-6 w-px bg-line"
+                  />
                 )}
+                <span
+                  aria-hidden="true"
+                  className="relative flex size-12 shrink-0 items-center justify-center rounded-ui border border-navy bg-paper font-serif text-xl text-navy"
+                >
+                  {i + 1}
+                </span>
+                <div className="pt-1.5">
+                  <h3 className="text-2xl sm:text-3xl">{s.title}</h3>
+                  <p className="mt-2 text-lg text-muted">{s.description}</p>
+                  {s.href === "visit" ? (
+                    <button
+                      type="button"
+                      onClick={() => openVisit()}
+                      className="btn btn-line mt-4 text-navy"
+                    >
+                      {s.cta}
+                    </button>
+                  ) : (
+                    <a href={s.href} className="btn btn-line mt-4 text-navy">
+                      {s.cta}
+                    </a>
+                  )}
+                </div>
               </li>
             );
           })}

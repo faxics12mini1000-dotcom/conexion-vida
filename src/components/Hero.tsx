@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { campuses } from "@/data/campuses";
-import { heroPhoto } from "@/data/site";
+import { getPhoto } from "@/data/site";
 import { useApp } from "./AppProvider";
 
 /**
@@ -12,10 +12,12 @@ import { useApp } from "./AppProvider";
  */
 export function Hero() {
   const { openVisit } = useApp();
+  const heroPhoto = getPhoto("hero");
 
   return (
     <section
       id="inicio"
+      aria-labelledby="hero-title"
       data-tone="dark"
       className="relative isolate flex min-h-svh flex-col bg-navy pt-16 text-cream"
     >
@@ -36,7 +38,7 @@ export function Hero() {
       <div className="wrap flex flex-1 flex-col justify-center py-16">
         <div className="hero-enter max-w-4xl">
           <p className="font-semibold text-green">Querétaro y Celaya</p>
-          <h1 className="mt-5 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
+          <h1 id="hero-title" className="mt-5 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
             Una iglesia actual. Personas reales.
           </h1>
           <p className="mt-6 text-lg text-on-navy sm:text-xl">
@@ -55,7 +57,7 @@ export function Hero() {
 
       <div className="border-t border-cream/20">
         <div className="wrap grid gap-x-10 gap-y-4 py-6 sm:grid-cols-[auto_1fr_1fr] sm:items-baseline">
-          <p className="text-sm font-semibold text-green">Reuniones</p>
+          <p className="text-sm font-semibold text-green">Reuniones dominicales</p>
           {campuses.map((c) => (
             <p key={c.id} className="text-on-navy">
               <span className="font-serif text-lg font-semibold text-cream">

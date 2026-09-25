@@ -8,58 +8,57 @@ export interface NextStep {
 }
 
 /**
- * Los títulos corresponden al camino que plantea la propia iglesia
- * (Propuesta página web.pdf: explorando la fe, conocer a Jesús, conectar,
- * bautizarme, servir, liderar; falta "formar a otros").
- * TODO(PENDIENTES §5): confirmar que este es el proceso real y sus descripciones.
- * TODO(Fase 3): los CTA apuntan a #contacto porque Grupos y Mensajes están ocultos.
+ * Los títulos son el camino de fe que plantea la propia iglesia
+ * (Propuesta página web.pdf; confirmado 2026-09-25).
+ * TODO(PENDIENTES §5): revisar las descripciones con la iglesia y decidir
+ * si "Formar a otros" es un paso más.
  */
 export const nextSteps: NextStep[] = [
   {
-    id: "explorando",
-    title: "Estoy explorando la fe",
+    id: "explorar",
+    title: "Explorar la fe",
     description:
-      "Puedes venir a una reunión, escuchar y hacer preguntas. No necesitas saber nada de antemano.",
+      "Ven a una reunión, escucha y pregunta lo que quieras. No necesitas saber nada de antemano.",
     cta: "Planear mi visita",
     href: "visit",
   },
   {
     id: "jesus",
-    title: "Quiero conocer más de Jesús",
+    title: "Conocer más de Jesús",
     description:
-      "Escríbenos y conversa con alguien de la iglesia sobre quién es Jesús y qué significa seguirlo.",
+      "Conversa con alguien de la iglesia sobre quién es Jesús y qué significa seguirlo.",
     cta: "Escribirnos",
     href: "#contacto",
   },
   {
     id: "comunidad",
-    title: "Quiero conectar",
+    title: "Conectar en comunidad",
     description:
-      "La fe se vive mejor acompañado. Pregunta por un grupo pequeño cerca de ti.",
-    cta: "Preguntar por un grupo",
+      "La fe se vive mejor acompañado. Pregunta cómo conocer a otras personas de la iglesia.",
+    cta: "Preguntar cómo conectar",
     href: "#contacto",
   },
   {
     id: "bautismo",
-    title: "Quiero bautizarme",
+    title: "Bautismo",
     description:
-      "Un paso público que celebra la decisión de seguir a Jesús. Escríbenos para saber cómo prepararte.",
+      "Un paso público que celebra la decisión de seguir a Jesús. Escríbenos y te decimos cómo prepararte.",
     cta: "Quiero bautizarme",
     href: "#contacto",
   },
   {
     id: "servir",
-    title: "Quiero servir",
+    title: "Servir",
     description:
-      "Todos tenemos algo que aportar. Escríbenos y te decimos dónde hace falta ayuda.",
+      "Todos tenemos algo que aportar. Cuéntanos qué te gusta hacer y te decimos dónde hace falta ayuda.",
     cta: "Quiero servir",
     href: "#contacto",
   },
   {
     id: "liderar",
-    title: "Quiero liderar",
+    title: "Liderar",
     description:
-      "Si ya llevas tiempo en la iglesia y quieres guiar a otros, escríbenos.",
+      "Si ya llevas tiempo en la iglesia y quieres acompañar a otros, platiquemos.",
     cta: "Quiero liderar",
     href: "#contacto",
   },

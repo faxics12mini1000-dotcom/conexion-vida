@@ -19,6 +19,11 @@ export interface Campus {
   /** Ubicación general. TODO(PENDIENTES §2): sustituir por dirección exacta. */
   address: string;
   services: ServiceTime[];
+  /**
+   * Búsqueda en Google Maps (no hay dirección exacta todavía).
+   * TODO(PENDIENTES §2): sustituir por el enlace exacto del lugar.
+   */
+  mapsUrl: string;
   instagram: { url: string; handle: string };
   /** Redes públicas adicionales encontradas (Facebook, YouTube). */
   links: { label: string; url: string }[];
@@ -26,10 +31,14 @@ export interface Campus {
   logo: { src: string; alt: string };
 }
 
+const mapsSearch = (query: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
 /**
- * Datos tomados de las biografías públicas de Instagram/Facebook de cada
- * campus (consultadas el 2026-09-24). No están confirmados por la iglesia:
- * TODO(PENDIENTES §2): verificar horarios y qué tipo de reunión es cada uno.
+ * Horarios confirmados por la iglesia (2026-09-25): una sola reunión dominical
+ * por campus. Los viernes (Querétaro) y miércoles (Celaya) ya no se muestran.
+ * Redes tomadas de los perfiles públicos de cada campus.
+ * TODO(PENDIENTES §2): dirección exacta de cada campus.
  */
 export const campuses: Campus[] = [
   {
@@ -38,8 +47,8 @@ export const campuses: Campus[] = [
     shortName: "Querétaro",
     city: "Juriquilla, Querétaro",
     address: "Juriquilla, Querétaro",
+    mapsUrl: mapsSearch("Conexión Vida Juriquilla Querétaro"),
     services: [
-      { day: "Viernes", weekday: 5, label: "7:30 PM", hour: 19, minute: 30 },
       { day: "Domingo", weekday: 0, label: "12:30 PM", hour: 12, minute: 30 },
     ],
     instagram: {
@@ -60,8 +69,8 @@ export const campuses: Campus[] = [
     shortName: "Celaya",
     city: "Celaya, Guanajuato",
     address: "Celaya, Guanajuato",
+    mapsUrl: mapsSearch("Conexión Vida Celaya Guanajuato"),
     services: [
-      { day: "Miércoles", weekday: 3, label: "7:30 PM", hour: 19, minute: 30 },
       { day: "Domingo", weekday: 0, label: "10:00 AM", hour: 10, minute: 0 },
     ],
     instagram: {
@@ -90,14 +99,12 @@ export function getCampus(id: CampusId): Campus {
 }
 
 /*
- * OCULTO. Datos que estaban en el proyecto y no tienen fuente. No mostrar
- * hasta que la iglesia los confirme (ver PENDIENTES.md):
+ * OCULTO. Datos sin fuente; no mostrar hasta que la iglesia los confirme
+ * (ver PENDIENTES.md):
  *
  * - Descripciones: "Nuestra primera casa: música contemporánea…" (Querétaro),
  *   "Una comunidad joven y familiar…" (Celaya).
  * - Badges Querétaro: Kids & Teens, Cafetería & Conexión, Estacionamiento disponible.
  * - Badges Celaya: Wuambaland, Comunidad Joven, Grupos en casa.
- * - Horarios de ejemplo: Dom 10:00 y 12:00 (Qro), Dom 11:00 (Celaya).
- * - mapsUrl: búsqueda genérica de Google Maps. TODO: enlace exacto del lugar.
  * - "Próximamente" / "En camino" en Puebla y Santa María.
  */

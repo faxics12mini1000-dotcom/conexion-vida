@@ -3,8 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
-    // Solo imágenes locales (/public). Si se reactivan las secciones ocultas que
-    // usan stock de Unsplash, hay que reemplazarlas por fotos reales antes.
+    // Solo imágenes locales (/public): sin remotePatterns a propósito.
+    // Las fotos van en /public/photos y se asignan en src/data/site.ts.
   },
 };
 

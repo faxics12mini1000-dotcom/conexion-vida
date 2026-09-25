@@ -30,6 +30,21 @@ Regla del proyecto: no se inventa nada. Mientras falte un dato, el sitio muestra
 
 **Stock restante:** `images` en `src/data/site.ts` solo lo usan secciones ocultas (Niños, Mensajes, Grupos, Generosidad). Se quitó el dominio de Unsplash de `next.config.ts`: hay que reemplazarlas por fotos reales antes de reactivarlas.
 
+## Estado tras las Fases 3 y 4 (2026-09-25)
+
+**Reactivadas y con copy real de la iglesia:** ¿Es tu primera vez? (5 respuestas), Niños y jóvenes (Wuambaland: bebés y preescolar; Up Street: primaria y jóvenes), Mensajes (serie "Lo que nuestro mundo necesita ya" + canal de YouTube), Próximos pasos (Explorar la fe → Liderar), Generosidad y Contacto.
+**Horarios confirmados:** solo domingo. Querétaro 12:30 PM, Celaya 10:00 AM (se eliminaron viernes y miércoles). Duración de la reunión: ~75-80 min (el .ics usa 80).
+**Sigue oculta:** Grupos pequeños (no hay grupos reales).
+
+- [ ] **Fotos:** guardar en `public/photos/` y asignar en `churchPhotos` (`src/data/site.ts`): `hero`, `auditorio`, `comunidad`, `wuambaland`, `upStreet`, `serie`. Sin foto, cada marco muestra un contenedor de marca.
+- [ ] **CLABE oficial** (beneficiario, banco, concepto) en `giving` (`src/data/site.ts`). Mientras sea `null`, la sección dice "Por confirmar" y el botón de copiar está deshabilitado.
+- [ ] **WhatsApp:** definir `NEXT_PUBLIC_WHATSAPP_NUMBER` (solo dígitos con lada, ej. `5214421234567`). Sin él, el pie muestra un aviso.
+- [ ] **Dominio final:** definir `NEXT_PUBLIC_SITE_URL`. Hoy `robots.txt`, `sitemap.xml`, canonical y Open Graph apuntan a `http://localhost:3000`.
+- [ ] **Dirección exacta y enlace de Maps** por campus. Hoy "Cómo llegar" abre una búsqueda de Google Maps ("Conexión Vida Juriquilla Querétaro" / "…Celaya Guanajuato").
+- [ ] Confirmar el canal de YouTube: se usó `youtube.com/c/conexionvidacelaya` como canal oficial. Falta el ID de video de la serie (si se agrega en `currentSeries.youtubeId`, se incrusta el reproductor).
+- [ ] Revisar con la iglesia el texto de "Quiénes somos", las descripciones de los pasos y de Wuambaland / Up Street.
+- [ ] Imagen Open Graph: hoy se genera en el build (`src/app/opengraph-image.tsx`, navy con texto). Reemplazar por una con foto real cuando exista.
+
 ## 1. Identidad y dominio
 - [ ] Dominio final de producción (para `metadataBase`, Open Graph, sitemap, canonical).
 - [ ] Nombre oficial completo de la iglesia y denominación/afiliación, si aplica.

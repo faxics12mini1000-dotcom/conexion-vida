@@ -1,11 +1,10 @@
-import { images, type SiteImage } from "./site";
+import type { PhotoKey } from "./site";
 
 export interface Message {
   id: string;
   title: string;
   speaker: string;
   date: string;
-  image: SiteImage;
   /** ID de YouTube (opcional). Si existe, se puede reproducir en el sitio. */
   youtubeId?: string;
 }
@@ -13,23 +12,22 @@ export interface Message {
 export interface Series {
   title: string;
   subtitle: string;
-  image: SiteImage;
+  photo: PhotoKey;
   /** TODO(PENDIENTES §6): ID del video de YouTube de la serie actual. */
   youtubeId?: string;
-  /** Canal público de Celaya; TODO(PENDIENTES §6): confirmar el canal oficial. */
-  channelUrl?: string;
+  /** Canal oficial de YouTube indicado por la iglesia. */
+  channelUrl: string;
 }
 
 /**
- * OCULTO (MessagesSection). El nombre de la serie viene del esquema de la
- * iglesia ("lo que nuestro mundo necesita ya"). Las predicaciones que había
- * (Fe en medio de lo incierto, etc.) eran inventadas y se eliminaron.
- * TODO(PENDIENTES §6): cargar videos reales.
+ * Serie confirmada por la iglesia (2026-09-25). Las predicaciones que había
+ * eran inventadas y se eliminaron.
+ * TODO(PENDIENTES §6): IDs de video y quién predica cada mensaje.
  */
 export const currentSeries: Series = {
   title: "Lo que nuestro mundo necesita ya",
   subtitle: "Serie actual",
-  image: images.seriesHero,
+  photo: "serie",
   channelUrl: "https://www.youtube.com/c/conexionvidacelaya",
 };
 
