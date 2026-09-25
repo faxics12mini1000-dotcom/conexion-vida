@@ -12,17 +12,13 @@ export function NextSteps() {
   const [openId, setOpenId] = useState<string | null>(nextSteps[0].id);
 
   return (
-    <section
-      id="proximos-pasos"
-      data-tone="dark"
-      className="section-y bg-navy text-cream"
-    >
+    <section id="proximos-pasos" className="section-y bg-paper">
       <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
-          <SectionHeading tone="dark" title="¿Dónde estás en tu camino?" />
+          <SectionHeading title="¿Dónde estás en tu camino?" />
         </div>
 
-        <ol className="divide-y divide-cream/20 border-y border-cream/20 lg:col-span-8">
+        <ol className="divide-y divide-line border-y border-line lg:col-span-8">
           {nextSteps.map((s, i) => {
             const open = openId === s.id;
             return (
@@ -35,7 +31,7 @@ export function NextSteps() {
                     aria-controls={`step-${s.id}`}
                     className="flex min-h-14 w-full items-center gap-4 py-4 text-left"
                   >
-                    <span className="w-8 shrink-0 font-sans text-base text-green">
+                    <span className="w-8 shrink-0 font-sans text-base font-semibold text-green-deep">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="flex-1">{s.title}</span>
@@ -47,17 +43,17 @@ export function NextSteps() {
                 </h3>
                 {open && (
                   <div id={`step-${s.id}`} className="pb-6 pl-12">
-                    <p className="text-on-navy">{s.description}</p>
+                    <p className="text-muted">{s.description}</p>
                     {s.href === "visit" ? (
                       <button
                         type="button"
                         onClick={() => openVisit()}
-                        className="btn btn-green mt-4"
+                        className="btn btn-navy mt-4"
                       >
                         {s.cta}
                       </button>
                     ) : (
-                      <a href={s.href} className="btn btn-green mt-4">
+                      <a href={s.href} className="btn btn-navy mt-4">
                         {s.cta}
                       </a>
                     )}

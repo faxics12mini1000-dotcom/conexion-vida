@@ -35,7 +35,8 @@ export function Footer() {
             <div key={c.id}>
               <h3 className="text-2xl">{c.name}</h3>
               <p className="mt-1 text-on-navy">{c.city}</p>
-              <ul className="mt-3 text-on-navy">
+              <p className="mt-4 text-sm font-semibold text-green">Reuniones</p>
+              <ul className="mt-1 text-on-navy">
                 {c.services.map((s) => (
                   <li key={s.day + s.label}>
                     {s.day} · {s.label}

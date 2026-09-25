@@ -20,6 +20,16 @@ Regla del proyecto: no se inventa nada. Mientras falte un dato, el sitio muestra
 - [ ] Logo general de la iglesia (los dos logos son variantes por campus). Vector SVG de ambos: los JPG de 447 px se ven borrosos en pantallas grandes.
 - [ ] Logos de Puebla y Santa María, si tienen.
 
+## Estado tras la Fase 2 (2026-09-24)
+
+**Decisiones confirmadas:** horarios de los Instagram oficiales, etiquetados como "Reuniones" (neutral); wordmark tipográfico en Fraunces para Navbar y Footer; logos `qro.jpg`/`celaya.jpg` solo en su tarjeta de campus; Puebla y Santa María solo con nombre, sin estatus.
+
+**Hero sin fotografía (fondo navy `#0B2848` sólido).** Se intentó extraer fotos de los perfiles públicos de Instagram de Querétaro y Celaya: sin sesión iniciada solo se expone la foto de perfil a 100×100 px y los posts no son accesibles. Un hero de 100svh necesita ≥2400 px de ancho, así que no hay nada utilizable. No hay stock en el hero.
+- [ ] **Foto real del hero** (ver §10). Al recibirla: guardarla en `public/photos/`, asignarla a `heroPhoto` en `src/data/site.ts`; el componente ya aplica overlay sólido `navy/80` y `preload` (sin gradientes).
+- [ ] **Logos en SVG** (Querétaro y Celaya). Hoy son JPG de 447 px con fondo navy, servidos con `next/image` (avif/webp, `sizes="64px"`). Con un SVG se puede quitar el recuadro navy y usar una versión sobre fondo claro.
+
+**Stock restante:** `images` en `src/data/site.ts` solo lo usan secciones ocultas (Niños, Mensajes, Grupos, Generosidad). Se quitó el dominio de Unsplash de `next.config.ts`: hay que reemplazarlas por fotos reales antes de reactivarlas.
+
 ## 1. Identidad y dominio
 - [ ] Dominio final de producción (para `metadataBase`, Open Graph, sitemap, canonical).
 - [ ] Nombre oficial completo de la iglesia y denominación/afiliación, si aplica.
@@ -99,7 +109,7 @@ Solo fotos reales de la iglesia. Horizontales, mínimo 2400 px de ancho, sin fil
 - [ ] Retratos de pastores.
 - [ ] Una foto por ministerio.
 - [ ] Imagen para vista previa en WhatsApp (1200×630, se genera en la Fase 4 a partir de una de las anteriores).
-- Si no hay fotos, el sitio muestra un bloque de color sólido neutro (sin stock).
+- Sin fotos, el hero es navy sólido (`#0B2848`), sin stock. Hoy es el caso.
 
 ## 11. Decisiones de diseño que dependen de ti (no de la iglesia)
 - [ ] Elegir paleta: Opción A (terracota + verde bosque) u Opción B (azul tinta + ocre). Ver `AUDITORIA.md` §6.

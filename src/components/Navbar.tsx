@@ -48,7 +48,7 @@ export function Navbar() {
   return (
     <header
       data-tone="dark"
-      className="sticky top-0 z-50 border-b border-cream/15 bg-navy text-cream"
+      className="sticky top-0 z-50 -mb-16 border-b border-cream/15 bg-navy text-cream"
     >
       <nav
         className="wrap flex h-16 items-center justify-between gap-4"

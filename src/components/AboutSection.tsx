@@ -16,7 +16,7 @@ const expect = [
 
 export function AboutSection() {
   return (
-    <section id="quienes-somos" className="section-y bg-paper">
+    <section id="quienes-somos" className="section-y bg-cream">
       <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <SectionHeading

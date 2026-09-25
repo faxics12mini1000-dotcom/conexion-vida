@@ -36,15 +36,19 @@ export interface SiteImage {
 }
 
 /**
- * STOCK TEMPORAL. La regla del proyecto prohíbe fotos de stock: todas se
- * sustituyen por fotos reales de la iglesia en la Fase 2 (PENDIENTES §10).
+ * Foto del hero. `null` = fondo navy sólido (#0B2848) con el texto encima.
+ * Solo fotos reales de la iglesia (PENDIENTES §10): al recibir una, ponerla en
+ * /public/photos (mínimo 2400 px de ancho, JPG) y asignarla aquí; el hero le
+ * aplica un overlay sólido y la carga con prioridad.
+ */
+export const heroPhoto: SiteImage | null = null;
+
+/**
+ * STOCK TEMPORAL, solo para secciones OCULTAS (Niños, Mensajes, Grupos,
+ * Generosidad). No se renderizan hoy; sustituir por fotos reales antes de
+ * reactivarlas (PENDIENTES §10). Ninguna sección visible usa stock.
  */
 export const images = {
-  hero: {
-    src: unsplash("1516450360452-9312f5e86fc7"),
-    alt: "",
-  },
-  // Usadas solo por secciones ocultas (Niños, Mensajes, Grupos, Generosidad).
   hands: { src: unsplash("1531206715517-5c0ba140b2b8"), alt: "" },
   kidsPlay: { src: unsplash("1503454537195-1dcabb73ffb9"), alt: "" },
   kidsCraft: { src: unsplash("1596464716127-f2a82984de30"), alt: "" },

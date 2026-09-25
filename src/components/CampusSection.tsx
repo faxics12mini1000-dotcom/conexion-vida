@@ -17,26 +17,28 @@ function CampusCard({ campus }: { campus: Campus }) {
     <article
       data-campus={campus.id}
       className={cn(
-        "flex flex-col overflow-hidden rounded-ui border-2 bg-paper",
-        selected === campus.id ? "border-campus" : "border-line",
+        "flex flex-col overflow-hidden rounded-ui border-2 bg-paper text-ink",
+        selected === campus.id ? "border-green" : "border-paper",
       )}
     >
-      <div data-tone="dark" className="flex items-center gap-4 bg-navy p-5 text-cream">
+      <div className="flex items-center gap-4 border-b border-line p-5">
+        {/* Lazy por defecto; sizes fija el tamaño real (64 px) para no bajar el JPG completo. */}
         <Image
           src={campus.logo.src}
           alt={campus.logo.alt}
-          width={64}
-          height={64}
-          className="size-16 shrink-0"
+          width={447}
+          height={447}
+          sizes="64px"
+          className="size-16 shrink-0 rounded-ui"
         />
         <div>
-          <p className="text-sm text-on-navy">{campus.city}</p>
+          <p className="text-sm text-muted">{campus.city}</p>
           <h3 className="text-2xl">{campus.name}</h3>
         </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <h4 className="font-sans text-base font-semibold text-campus">Horarios</h4>
+        <h4 className="font-sans text-base font-semibold text-campus">Reuniones</h4>
         <ul className="mt-3 divide-y divide-line rounded-ui bg-campus-soft px-4">
           {campus.services.map((s) => (
             <li key={s.label + s.day} className="flex justify-between gap-4 py-3">
@@ -88,9 +90,9 @@ function CampusCard({ campus }: { campus: Campus }) {
 
 export function CampusSection() {
   return (
-    <section id="campus" className="section-y bg-cream">
+    <section id="campus" data-tone="dark" className="section-y bg-navy text-cream">
       <div className="wrap">
-        <SectionHeading title="Campus" lead="Dónde y cuándo nos reunimos." />
+        <SectionHeading tone="dark" title="Campus" lead="Dónde y cuándo nos reunimos." />
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {campuses.map((c) => (
@@ -99,7 +101,7 @@ export function CampusSection() {
         </div>
 
         {/* TODO(PENDIENTES §2): datos y logo de Puebla y Santa María. Hoy solo el nombre. */}
-        <div className="mt-12 border-t border-line pt-8">
+        <div className="mt-12 border-t border-cream/20 pt-8">
           <h3 className="text-2xl">Otros campus</h3>
           <ul className="mt-4 flex flex-wrap gap-x-10 gap-y-2 font-serif text-2xl">
             {otherCampuses.map((c) => (
