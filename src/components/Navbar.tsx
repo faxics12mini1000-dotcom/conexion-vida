@@ -37,6 +37,22 @@ function CampusSelect({ id }: { id: string }) {
 export function Navbar() {
   const { openVisit } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+
+  // Resalta el enlace de la sección que está en pantalla.
+  useEffect(() => {
+    const sections = navLinks
+      .map((l) => document.querySelector<HTMLElement>(l.href))
+      .filter((el): el is HTMLElement => el !== null);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(`#${e.target.id}`);
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -63,7 +79,12 @@ export function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="inline-flex min-h-11 items-center px-2 text-[0.95rem] whitespace-nowrap text-cream/85 hover:text-cream"
+                aria-current={active === l.href ? "location" : undefined}
+                className={`inline-flex min-h-11 items-center border-b-2 px-2 text-[0.95rem] whitespace-nowrap hover:text-cream ${
+                  active === l.href
+                    ? "border-green text-cream"
+                    : "border-transparent text-cream/85"
+                }`}
               >
                 {l.label}
               </a>
@@ -93,6 +114,10 @@ export function Navbar() {
           )}
         </button>
       </nav>
+      <div
+        aria-hidden="true"
+        className="read-progress absolute inset-x-0 bottom-0 h-0.5 bg-green"
+      />
 
       {menuOpen && (
         <div id="mobile-menu" className="border-t border-cream/15 xl:hidden">

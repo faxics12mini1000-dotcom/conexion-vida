@@ -4,7 +4,7 @@
  * Sistema de diseño Conexión Vida.
  * Marca: azul marino y verde tomados de los logos oficiales de cada campus
  * (medidos por píxel: #0B2848 y #4EA62B) + neutros cálidos.
- * Reglas: sin gradientes, sin blur, sin sombras, radius máximo 3px.
+ * Reglas: sin degradados suaves, sin blur, radius 6px; sombra solo al pasar el cursor.
  */
 
 @theme static {
@@ -34,10 +34,11 @@
 
   /* Radius: un solo valor. Se desactivan los demás. */
   --radius-*: initial;
-  --radius-ui: 3px;
+  --radius-ui: 6px;
 
-  /* Sin sombras */
+  /* Solo una sombra, para elevar tarjetas al pasar el cursor */
   --shadow-*: initial;
+  --shadow-lift: 0 14px 32px -16px rgb(11 40 72 / 0.35);
   --inset-shadow-*: initial;
   --drop-shadow-*: initial;
   --blur-*: initial;
@@ -185,7 +186,7 @@ footer[id] {
   }
 }
 
-/* Única animación del sitio: entrada del contenido del hero */
+/* Entrada del contenido del hero */
 @keyframes hero-enter {
   from {
     opacity: 0;
@@ -207,5 +208,72 @@ footer[id] {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ---------- Movimiento sutil ---------- */
+
+/* Aparición al hacer scroll. Sin JS (o con movimiento reducido) todo se ve normal. */
+.js-reveal [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(18px);
+}
+[data-reveal] {
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal]:not(.is-in) {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal] {
+    transition: none;
+  }
+}
+
+/* Tarjetas que se elevan al pasar el cursor */
+@utility lift {
+  transition:
+    transform 250ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 250ms,
+    border-color 250ms;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+/* Anillos concéntricos: motivo de "conexión", solo líneas. */
+@utility rings {
+  background-image: repeating-radial-gradient(
+    circle at center,
+    transparent 0 5.5rem,
+    currentColor 5.5rem calc(5.5rem + 1px)
+  );
+}
+
+/* Barra de progreso de lectura (usa animation-timeline donde existe) */
+@keyframes read-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@utility read-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+  @supports (animation-timeline: scroll()) {
+    animation: read-progress linear both;
+    animation-timeline: scroll(root);
   }
 }

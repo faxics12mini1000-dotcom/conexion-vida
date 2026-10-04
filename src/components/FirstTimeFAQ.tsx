@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { faqItems } from "@/data/faq";
 import { useApp } from "./AppProvider";
 import { PhotoFrame } from "./PhotoFrame";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 /** Acordeón con <details> nativo: funciona sin JS (el CTA sí usa el modal). */
@@ -22,6 +23,7 @@ export function FirstTimeFAQ() {
           <SectionHeading
             id="primera-vez-title"
             tone="dark"
+            eyebrow="Primera visita"
             title="¿Es tu primera vez?"
             lead="Lo que necesitas saber antes de venir. Sin presión: ven como estás."
           />
@@ -42,20 +44,20 @@ export function FirstTimeFAQ() {
           </button>
         </div>
 
-        <div className="divide-y divide-cream/20 border-y border-cream/20 lg:col-span-7 lg:self-start">
+        <Reveal className="divide-y divide-cream/20 border-y border-cream/20 lg:col-span-7 lg:self-start">
           {faqItems.map((f, i) => (
-            <details key={f.id} className="group" open={i === 0}>
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 font-serif text-xl sm:text-2xl [&::-webkit-details-marker]:hidden">
+            <details key={f.id} className="group transition-colors open:bg-cream/5" open={i === 0}>
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-3 py-4 font-serif hover:text-green text-xl sm:text-2xl [&::-webkit-details-marker]:hidden">
                 {f.question}
                 <ChevronDown
                   className="size-5 shrink-0 transition-transform group-open:rotate-180"
                   aria-hidden="true"
                 />
               </summary>
-              <p className="pb-6 text-lg text-on-navy">{f.answer}</p>
+              <p className="px-3 pb-6 text-lg text-on-navy">{f.answer}</p>
             </details>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

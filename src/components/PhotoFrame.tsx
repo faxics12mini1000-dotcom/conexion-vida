@@ -46,12 +46,19 @@ export function PhotoFrame({
         <div
           aria-hidden="true"
           className={cn(
-            "absolute inset-0 flex flex-col items-center justify-center gap-1 p-4 text-center",
-            tone === "dark" ? "text-on-navy" : "text-navy",
+            "absolute inset-0 flex flex-col items-center justify-center gap-1 overflow-hidden p-4 text-center",
+            tone === "dark" ? "bg-navy text-on-navy" : "text-navy",
           )}
         >
-          <span className="font-serif text-xl sm:text-2xl">{label}</span>
-          <span className="text-sm tracking-wide opacity-80">Conexión Vida</span>
+          <div
+            className={cn(
+              "rings absolute top-1/2 left-1/2 size-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full",
+              tone === "dark" ? "text-cream/10" : "text-navy/10",
+            )}
+          />
+          <span className="relative size-2.5 rounded-full bg-green" />
+          <span className="relative mt-2 font-serif text-xl sm:text-2xl">{label}</span>
+          <span className="relative text-sm tracking-wide opacity-80">Conexión Vida</span>
         </div>
       )}
     </div>

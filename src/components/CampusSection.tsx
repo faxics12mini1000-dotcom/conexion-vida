@@ -6,12 +6,13 @@ import { campuses, otherCampuses, type Campus } from "@/data/campuses";
 import { cn } from "@/lib/utils";
 import { useApp } from "./AppProvider";
 import { InstagramIcon } from "./icons";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 const linkClass =
   "inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4 hover:text-campus";
 
-function CampusCard({ campus, featured }: { campus: Campus; featured: boolean }) {
+function CampusCard({ campus }: { campus: Campus }) {
   const { openVisit } = useApp();
 
   return (
@@ -19,8 +20,7 @@ function CampusCard({ campus, featured }: { campus: Campus; featured: boolean })
       data-campus={campus.id}
       aria-labelledby={`campus-${campus.id}`}
       className={cn(
-        "flex flex-col rounded-ui border border-line bg-paper text-ink",
-        featured ? "lg:col-span-7" : "lg:col-span-5 lg:mt-16",
+        "lift flex h-full flex-col rounded-ui border border-line bg-paper text-ink hover:border-campus",
       )}
     >
       <div className="flex items-center gap-4 border-b border-line p-5 sm:p-6">
@@ -106,13 +106,20 @@ export function CampusSection() {
       <div className="wrap">
         <SectionHeading
           id="campus-title"
+          eyebrow="Campus"
           title="Campus y cómo llegar"
           lead="Nos reunimos los domingos en Querétaro y en Celaya."
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-12 lg:items-start">
           {campuses.map((c, i) => (
-            <CampusCard key={c.id} campus={c} featured={i === 0} />
+            <Reveal
+              key={c.id}
+              delay={i * 120}
+              className={i === 0 ? "lg:col-span-7" : "lg:col-span-5 lg:mt-16"}
+            >
+              <CampusCard campus={c} />
+            </Reveal>
           ))}
         </div>
 

@@ -3,6 +3,7 @@
 import { nextSteps } from "@/data/nextSteps";
 import { cn } from "@/lib/utils";
 import { useApp } from "./AppProvider";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 /** Stepper editorial: todos los pasos visibles, unidos por una línea vertical. */
@@ -20,6 +21,7 @@ export function NextSteps() {
           <div className="lg:sticky lg:top-24">
             <SectionHeading
               id="proximos-pasos-title"
+              eyebrow="Próximos pasos"
               title="¿Dónde estás en tu camino?"
               lead="Cada quien va a su ritmo. Elige el paso que te toca hoy."
             />
@@ -30,7 +32,7 @@ export function NextSteps() {
           {nextSteps.map((s, i) => {
             const last = i === nextSteps.length - 1;
             return (
-              <li key={s.id} className={cn("relative flex gap-5 sm:gap-8", !last && "pb-12")}>
+              <Reveal as="li" key={s.id} className={cn("relative flex gap-5 sm:gap-8", !last && "pb-12")}>
                 {!last && (
                   <span
                     aria-hidden="true"
@@ -39,7 +41,7 @@ export function NextSteps() {
                 )}
                 <span
                   aria-hidden="true"
-                  className="relative flex size-12 shrink-0 items-center justify-center rounded-ui border border-navy bg-paper font-serif text-xl text-navy"
+                  className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-xl text-cream"
                 >
                   {i + 1}
                 </span>
@@ -60,7 +62,7 @@ export function NextSteps() {
                     </a>
                   )}
                 </div>
-              </li>
+              </Reveal>
             );
           })}
         </ol>

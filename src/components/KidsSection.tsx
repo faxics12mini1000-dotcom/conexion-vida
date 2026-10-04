@@ -4,13 +4,14 @@ import { kidsPrograms, type KidsProgram } from "@/data/kids";
 import { cn } from "@/lib/utils";
 import { useApp } from "./AppProvider";
 import { PhotoFrame } from "./PhotoFrame";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 /** Layout asimétrico: el segundo bloque invierte columnas, proporción y desfase. */
 function Program({ program, reverse }: { program: KidsProgram; reverse: boolean }) {
   return (
-    <article
-      aria-labelledby={`programa-${program.id}`}
+    <Reveal
+      as="article"
       className="grid items-end gap-6 lg:grid-cols-12 lg:gap-12"
     >
       <PhotoFrame
@@ -34,7 +35,7 @@ function Program({ program, reverse }: { program: KidsProgram; reverse: boolean 
         </h3>
         <p className="mt-4 text-lg text-on-navy">{program.description}</p>
       </div>
-    </article>
+    </Reveal>
   );
 }
 
@@ -52,6 +53,7 @@ export function KidsSection() {
         <SectionHeading
           id="ministerios-title"
           tone="dark"
+          eyebrow="Ministerios"
           title="Niños y jóvenes"
           lead="Espacios pensados para ellos, para que tú vivas la reunión con tranquilidad."
         />

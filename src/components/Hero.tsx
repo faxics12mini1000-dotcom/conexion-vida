@@ -1,9 +1,10 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { campuses } from "@/data/campuses";
 import { getPhoto } from "@/data/site";
 import { useApp } from "./AppProvider";
+import { NextService } from "./NextService";
 
 /**
  * Hero a pantalla completa (100svh). El header es sticky con margen inferior
@@ -19,7 +20,7 @@ export function Hero() {
       id="inicio"
       aria-labelledby="hero-title"
       data-tone="dark"
-      className="relative isolate flex min-h-svh flex-col bg-navy pt-16 text-cream"
+      className="relative isolate flex min-h-svh overflow-hidden flex-col bg-navy pt-16 text-cream"
     >
       {heroPhoto && (
         <>
@@ -35,11 +36,24 @@ export function Hero() {
         </>
       )}
 
+      {/* Anillos de "conexión": solo líneas, sin degradados */}
+      <div
+        aria-hidden="true"
+        className="rings pointer-events-none absolute -top-32 -right-48 -z-10 size-[44rem] rounded-full text-cream/10 lg:-right-24 lg:size-[56rem]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 right-[8%] -z-10 hidden size-3 rounded-full bg-green lg:block"
+      />
+
       <div className="wrap flex flex-1 flex-col justify-center py-16">
         <div className="hero-enter max-w-4xl">
-          <p className="font-semibold text-green">Querétaro y Celaya</p>
+          <p className="inline-flex items-center gap-3 font-semibold text-green">
+            <span aria-hidden="true" className="h-px w-10 bg-green" />
+            Querétaro y Celaya
+          </p>
           <h1 id="hero-title" className="mt-5 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
-            Una iglesia actual. Personas reales.
+            Una iglesia actual. <span className="text-green">Personas reales.</span>
           </h1>
           <p className="mt-6 text-lg text-on-navy sm:text-xl">
             Conectando a las personas con Jesús.
@@ -55,19 +69,15 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="border-t border-cream/20">
-        <div className="wrap grid gap-x-10 gap-y-4 py-6 sm:grid-cols-[auto_1fr_1fr] sm:items-baseline">
-          <p className="text-sm font-semibold text-green">Reuniones dominicales</p>
-          {campuses.map((c) => (
-            <p key={c.id} className="text-on-navy">
-              <span className="font-serif text-lg font-semibold text-cream">
-                {c.shortName}
-              </span>
-              <br />
-              {c.services.map((s) => `${s.day} ${s.label}`).join(" · ")}
-            </p>
-          ))}
-        </div>
+      <div className="hero-enter wrap pb-8 [animation-delay:250ms]">
+        <NextService />
+        <a
+          href="#campus"
+          aria-label="Bajar a campus y horarios"
+          className="mx-auto mt-6 hidden w-fit items-center gap-2 text-sm text-on-navy hover:text-cream sm:flex"
+        >
+          <ChevronDown className="size-5 motion-safe:animate-bounce" aria-hidden="true" />
+        </a>
       </div>
     </section>
   );

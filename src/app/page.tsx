@@ -1,5 +1,6 @@
 import { AboutSection } from "@/components/AboutSection";
 import { AppProvider } from "@/components/AppProvider";
+import { ClosingCta } from "@/components/ClosingCta";
 import { CampusSection } from "@/components/CampusSection";
 import { FirstTimeFAQ } from "@/components/FirstTimeFAQ";
 import { Footer } from "@/components/Footer";
@@ -7,8 +8,11 @@ import { GivingSection } from "@/components/GivingSection";
 import { Hero } from "@/components/Hero";
 import { KidsSection } from "@/components/KidsSection";
 import { MessagesSection } from "@/components/MessagesSection";
+import { MissionBand } from "@/components/MissionBand";
+import { MobileCta } from "@/components/MobileCta";
 import { Navbar } from "@/components/Navbar";
 import { NextSteps } from "@/components/NextSteps";
+import { RevealObserver } from "@/components/Reveal";
 
 // GroupsSection sigue oculta: no hay grupos reales (PENDIENTES §5).
 // import { GroupsSection } from "@/components/GroupsSection";
@@ -29,12 +33,16 @@ export default function Home() {
         <CampusSection />
         <FirstTimeFAQ />
         <AboutSection />
+        <MissionBand />
         <KidsSection />
         <MessagesSection />
         <NextSteps />
         <GivingSection />
+        <ClosingCta />
       </main>
       <Footer />
+      <MobileCta />
+      <RevealObserver />
     </AppProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { Play } from "lucide-react";
 import { currentSeries, latestMessages } from "@/data/messages";
 import { PhotoFrame } from "./PhotoFrame";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 /**
@@ -19,12 +20,13 @@ export function MessagesSection() {
       <div className="wrap">
         <SectionHeading
           id="mensajes-title"
+          eyebrow="Predicaciones"
           title="Mensajes"
           lead="Escucha las enseñanzas de la iglesia cuando quieras, desde donde estés."
         />
 
         <div className="mt-12 grid items-center gap-8 lg:grid-cols-12 lg:gap-14">
-          <div className="lg:col-span-5">
+          <Reveal className="lg:col-span-5">
             <p className="font-semibold text-green-deep">{subtitle}</p>
             <h3 className="mt-3 text-4xl sm:text-5xl">{title}</h3>
             <a
@@ -36,9 +38,9 @@ export function MessagesSection() {
               Ver predicaciones en YouTube
               <span className="sr-only"> (se abre en otra pestaña)</span>
             </a>
-          </div>
+          </Reveal>
 
-          <div className="lg:col-span-7">
+          <Reveal delay={120} className="lg:col-span-7">
             {youtubeId ? (
               <div className="aspect-video overflow-hidden rounded-ui bg-navy">
                 <iframe
@@ -74,7 +76,7 @@ export function MessagesSection() {
                 </span>
               </a>
             )}
-          </div>
+          </Reveal>
         </div>
 
         {latestMessages.length > 0 && (

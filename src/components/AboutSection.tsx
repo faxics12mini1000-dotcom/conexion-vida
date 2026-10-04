@@ -1,4 +1,5 @@
 import { PhotoFrame } from "./PhotoFrame";
+import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 /**
@@ -25,8 +26,8 @@ export function AboutSection() {
       <div className="wrap">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
-            <SectionHeading id="quienes-somos-title" title="Quiénes somos" />
-            <p className="mt-8 max-w-2xl font-serif text-3xl leading-tight text-navy sm:text-4xl">
+            <SectionHeading id="quienes-somos-title" eyebrow="Conócenos" title="Quiénes somos" />
+            <p className="mt-8 max-w-2xl border-l-4 border-green pl-6 font-serif text-3xl leading-tight text-navy sm:text-4xl">
               Existimos para conectar a las personas con Jesús.
             </p>
             <p className="mt-6 text-lg text-muted">
@@ -52,9 +53,11 @@ export function AboutSection() {
           <h3 className="text-2xl sm:text-3xl">Lo que puedes esperar de nosotros</h3>
           <ul className="mt-8 grid gap-x-12 sm:grid-cols-2">
             {expect.map((item, i) => (
-              <li
+              <Reveal
+                as="li"
                 key={item}
-                className="flex items-baseline gap-4 border-b border-line py-4 font-serif text-xl sm:text-2xl"
+                delay={(i % 2) * 80}
+                className="flex items-baseline gap-4 border-b border-line py-4 font-serif text-xl transition-colors hover:border-green-deep sm:text-2xl"
               >
                 <span
                   aria-hidden="true"
@@ -63,7 +66,7 @@ export function AboutSection() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 {item}
-              </li>
+              </Reveal>
             ))}
           </ul>
         </div>
